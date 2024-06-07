@@ -1,0 +1,69 @@
+from random import randint
+
+def ler_navios_jogador(arquivo):
+    with open(arquivo) as arquivo_jogador:
+        linhas = arquivo_jogador.readlines()
+    encouracado = linhas[0].strip()  # Remover espaços em branco no início e no final
+    porta_aviao = linhas[1].strip()
+    submarino = linhas[2].strip()
+    cruzador = linhas[3].strip()
+    tiros = linhas[5].strip()
+    return encouracado, porta_aviao, submarino, cruzador, tiros
+
+
+# Leitura dos navios do jogador 1
+encouracado_j1, porta_aviao_j1, submarino_j1, cruzador_j1, tiros_j1 = ler_navios_jogador('jogador1.txt')
+
+# Leitura dos navios do jogador 2
+encouracado_j2, porta_aviao_j2, submarino_j2, cruzador_j2, tiros_j2 = ler_navios_jogador('jogador2.txt')
+
+# Definição dos navios
+navios = {
+    "1": ["E", "E", "E", "E"],  # Encouraçado
+    "2": ["P", "P", "P", "P", "P"],  # Porta-aviões
+    "3": ["S"],  # Submarino
+    "4": ["C", "C"]  # Cruzador
+}
+
+# Função para posicionar navio no tabuleiro
+def posicionar_navio(tabuleiro, navio, coordenadas):
+    linha, coluna, direcao = coordenadas
+    linha -= 1
+    coluna = ord(coluna.upper()) - ord('A')
+    tamanho = len(navio)
+    
+    if direcao == "V":
+        for i in range(tamanho):
+            tabuleiro[linha + i][coluna] = navio[i]
+    elif direcao == "H":
+        for i in range(tamanho):
+            tabuleiro[linha][coluna + i] = navio[i]
+
+# Função para posicionar navio com base na entrada do usuário
+def posicionar_navio_da_entrada(tabuleiro, entrada):
+    partes = entrada.split(";")
+    navio = partes[0]
+    coluna = partes[1][0]
+    linha = int(partes[1][1])
+    direcao = partes[1][2]
+    
+    posicionar_navio(tabuleiro, navio, (linha, coluna, direcao))
+
+# Definição e exibição do tabuleiro
+tabuleiro = []
+
+for _ in range(15):
+    linha = ["O"] * 15
+    tabuleiro.append(linha)
+
+def exibir_tabuleiro(tabuleiro):
+    print("     A B C D E F G H I J K L M N O")
+    print("   | " + "-"*29)
+    for i in range(15):
+        linha_numero = str(i + 1).rjust(2, '0')
+        print(f"{linha_numero} | {' '.join(tabuleiro[i])}")
+
+exibir_tabuleiro(tabuleiro)
+
+
+
